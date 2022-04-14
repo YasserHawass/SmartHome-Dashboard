@@ -1,0 +1,129 @@
+:root{
+  --white:#f0f0f8;
+  --blue:#3529a5;
+  --red: #ee443b;
+  --gray: #99a6ca;
+  --yellow: #fb9b26;
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap');
+
+.light-1 {
+  top: 11%;
+  left: 24%;
+}
+
+.light-2 {
+  top: 11%;
+  left: 46%;
+}
+
+.light-3 {
+  top: 16%;
+  left: 59%;
+}
+
+.vacuum-start {
+  bottom: 22%;
+  right: 12%;
+  width: 5%;
+}
+
+.vacuum {
+  animation: vacuum 5s ease infinite;
+}
+
+#motion-sensor-toggle-button:checked + label {
+  background-color: MediumSpringGreen;
+}
+
+#lights-toggle-button:checked + label,
+#cleaning-toggle-button:checked + label,
+#music-toggle-button:checked + label,
+#motion-sensor-toggle-button:checked + label {
+  background-color: MediumSpringGreen;
+}
+
+label .toggle-dot {
+  transition: transform 0.3s ease;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.glassmorphism {
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.controls {
+  min-height: 300px;
+}
+
+.controls img {
+  margin: 0.5rem;
+}
+
+#lights-toggle-button:checked + label .toggle-dot,
+#cleaning-toggle-button:checked + label .toggle-dot,
+#music-toggle-button:checked + label .toggle-dot,
+#motion-sensor-toggle-button:checked + label .toggle-dot {
+  transform: translateX(1.3rem);
+}
+
+@keyframes vacuum {
+  0% {
+    transform: translate(0%) rotate(-360deg);
+  }
+  25% {
+    transform: translateY(-350%);
+  }
+  50% {
+    transform: translateY(-350%) translateX(-500%) rotate(360deg);
+  }
+  75% {
+    transform: translateY(-350%);
+  }
+  100% {
+    transform: translate(0%) rotate(360deg);
+  }
+}
+
+.sensor {
+  bottom: 49%;
+  left: 89%;
+  width: 0.4rem;
+  height: 0.4rem;
+  background: red;
+  -webkit-box-shadow: 10px 10px 50px 30px red;
+     -moz-box-shadow: 10px 10px 50px 30px red;
+          box-shadow: 10px 10px 50px 30px red;
+}
+
+@media (max-width: 1024px) {
+  .controls {
+    width: 100%;
+    min-height: 100px;
+  }
+}
+
+@media (max-width: 767px) {
+  .controls {
+    max-width: 300px;
+    min-height: 200px;
+  }
+}
+
+.light {
+  width: 0.4rem;
+  height: 0.4rem;
+  background: rgb(253 230 138);
+  -webkit-box-shadow: 10px 10px 50px 30px rgb(253 230 138);
+     -moz-box-shadow: 10px 10px 50px 30px rgb(253 230 138);
+          box-shadow: 10px 10px 50px 30px rgb(253 230 138);
+}

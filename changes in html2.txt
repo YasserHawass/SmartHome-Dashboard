@@ -1,0 +1,11 @@
+@media (min-width: 1024px)
+.lg\:w-2\/6 {
+	66.666667%;
+
+
+class="controls grid place-items-center w-full lg:w-2/6 mt-8 lg:mt-0"
+class="controls grid gap-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-2 grid-rows-2 md:grid-rows-1 lg:grid-rows-2 max-w-full w-full"
+display: flex;
+
+.controls
+comment min-height out
