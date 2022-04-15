@@ -64,7 +64,7 @@ async def stream(camera, delay=None):
 @server.websocket("/stream0")
 async def stream0():
     # camera = VideoCamera("http://192.168.249.238/mjpeg/1")
-    camera = VideoCamera(1)
+    camera = VideoCamera(0)
     await stream(camera)
 
 
