@@ -224,26 +224,29 @@ app.layout = html.Div([
                     html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
                     html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
                 ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-            ], className="grid grid-cols-1 gap-4 grid-BANs"),
+            ], className="BAN1 grid grid-cols-1 gap-4 grid-BANs"),
             html.Div([
                 html.Div([
                     html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
                     html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
                 ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-            ], className="grid grid-cols-1 gap-4 grid-BANs"),
+            ], className="BAN2 grid grid-cols-1 gap-4 grid-BANs"),
             html.Div([
                 html.Div([
                     html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
                     html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
                 ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-            ], className="grid grid-cols-1 gap-4 grid-BANs"),
+            ], className="BAN3 grid grid-cols-1 gap-4 grid-BANs"),
             
-        ], className="ban-container", style={"display":"flex", "justify-content": "center"}),
+        ], className="ban-container BAN-Area", style={"display":"flex", "justify-content": "center"}),
         html.Div([
             dcc.Graph(id="internet_graph", figure=fig),
+        ], className="dashbaord-container Graph1"),
+        html.Div([
             dcc.Graph(id="electricity_graph", figure=electricity_fig),
-        ], className="dashbaord-container"),
-    ], id = "dashboard", style=none_display)
+        ], className="electricity-container Graph2"),
+
+    ], id = "dashboard test-container" , style=none_display)
 
 ], style={"display":"flex"}, id="main")
 
