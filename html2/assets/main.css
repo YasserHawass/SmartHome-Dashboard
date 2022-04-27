@@ -150,3 +150,10 @@ body {
 #view-container{
   width: 95%;
 }
+
+.grid-BANs{
+  padding: 20px;
+  margin: 50px;
+  height: 12rem;
+  width: 12rem;
+}
