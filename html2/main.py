@@ -27,7 +27,6 @@ import datetime
 
 
 flex_display = {'display':'flex'}
-
 none_display = {'display':'none'}
 
 frame_count = 0
@@ -118,7 +117,7 @@ app.layout = html.Div([
         html.Button("Home/Dashboard", id="m_button", n_clicks=0),
         # <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/09vDAnj6ezlRoHDu6fH1BW?utm_source=generator" width="50%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
         html.Iframe(id='spotify', src="https://open.spotify.com/embed/playlist/37i9dQZEVXcKQGtztD3HbB?utm_source=generator", allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"),
-    ],id='menu', className="grid place-items-center bg-plant bg-center bg-cover box-border min-h-screen w-full p-8 lg:p-0"),
+    ],id='menu', className="place-items-center bg-plant bg-center bg-cover box-border min-h-screen w-full p-8 lg:p-0"),
     
     html.Div([
 
@@ -212,41 +211,43 @@ app.layout = html.Div([
     ], id = "mainboard",className="mainboard", style=flex_display),
 
     html.Div([
+        
         html.Div([
-            html.H1(datetime.datetime.now().strftime("%A, "), style={"color": "#52697C"}),
-            html.H2(datetime.datetime.now().strftime(" %d %B %Y"), style={"padding-left": "10px", "color": "#778997"}),
-        ], id='date-container', style={'display': 'flex', 'position': 'absolute', 'right': '10px', 'top': '8px'}),
-        # BAN banner
-        html.Div([
-        # consists of 3 parts: left, center, right
             html.Div([
-                html.Div([
-                    html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                    html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-            ], className="BAN1 grid grid-cols-1 gap-4 grid-BANs"),
+                html.H1(datetime.datetime.now().strftime("%A, "), style={"color": "#52697C"}),
+                html.H2(datetime.datetime.now().strftime(" %d %B %Y"), style={"padding-left": "10px", "color": "#778997"}),
+            ], id='date-container', style={'display': 'flex', 'position': 'absolute', 'right': '10px', 'top': '8px'}),
+            # BAN banner
             html.Div([
+            # consists of 3 parts: left, center, right
                 html.Div([
-                    html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                    html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-            ], className="BAN2 grid grid-cols-1 gap-4 grid-BANs"),
+                    html.Div([
+                        html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
+                        html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                ], className="BAN1 grid grid-cols-1 gap-4 grid-BANs"),
+                html.Div([
+                    html.Div([
+                        html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
+                        html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                ], className="BAN2 grid grid-cols-1 gap-4 grid-BANs"),
+                html.Div([
+                    html.Div([
+                        html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
+                        html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                ], className="BAN3 grid grid-cols-1 gap-4 grid-BANs"),
+                
+            ], className="ban-container BAN-Area", style={"display":"flex", "justify-content": "center"}),
             html.Div([
-                html.Div([
-                    html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                    html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-            ], className="BAN3 grid grid-cols-1 gap-4 grid-BANs"),
-            
-        ], className="ban-container BAN-Area", style={"display":"flex", "justify-content": "center"}),
-        html.Div([
-            dcc.Graph(id="internet_graph", figure=fig),
-        ], className="dashbaord-container Graph1"),
-        html.Div([
-            dcc.Graph(id="electricity_graph", figure=electricity_fig),
-        ], className="electricity-container Graph2"),
-
-    ], id = "dashboard test-container" , style=none_display)
+                dcc.Graph(id="internet_graph", figure=fig),
+            ], className="dashbaord-container Graph1"),
+            html.Div([
+                dcc.Graph(id="electricity_graph", figure=electricity_fig),
+            ], className="electricity-container Graph2"),
+        ], className="test-container"),
+    ], id = "dashboard" , style=none_display)
 
 ], style={"display":"flex"}, id="main")
 
