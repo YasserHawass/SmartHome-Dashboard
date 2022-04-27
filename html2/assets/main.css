@@ -142,7 +142,7 @@ body {
 }
 
 #spotify{
-  position:absolute;
+  position:fixed;
   bottom:0;
   left: 0;
 }
@@ -167,6 +167,7 @@ body {
   grid-template-areas: 
     "BAN-Area BAN-Area BAN-Area BAN-Area"
     "Graph1 Graph1 Graph2 Graph2"
+    "Graph3 Graph3 Graph4 Graph4";
 }
 
 .BAN-Area {
