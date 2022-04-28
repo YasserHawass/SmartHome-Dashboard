@@ -54,6 +54,10 @@ fig = px.line(df[:25], x="x", y="y", title="Internet Usage")
 fig.add_scatter(x=days[25:], y=y_rbf[25:], name="Predicted", mode="markers")
 # draw horizontal line at y=140
 fig.add_shape(type="line", x0=0, y0=140, x1=31, y1=140, line=dict(color="red", width=2), layer="below")
+# change fig background color to transparent
+fig.update_layout(
+    paper_bgcolor='rgba(0,0,0,0)',
+)
 
 inverter_pwr_y = [221, 180, 181, 212, 211, 168, 185, 214, 172, 171, 202, 213, 205, 206, 241, 246, 163, 162, 206, 201, 159, 160, 202, 204, 161, 384, 386, 378, 375, 215, 201, 211, 212, 209, 210, 211, 210, 210, 167, 182, 210, 204, 130, 146, 187, 189, 148, 148, 222, 223, 179, 183, 221, 221, 180, 187, 221, 180, 179, 209, 224, 181, 205, 237, 258, 262, 223, 225, 275, 258, 217, 250, 249, 132, 176, 209, 232, 184, 209, 248, 258, 209, 212, 227, 258, 211, 189, 218, 295, 301, 278, 260, 299, 339, 275, 307, 309, 263, 269, 311, 307, 269, 276, 308, 257, 281, 305, 311, 272, 276, 319, 313, 268, 296, 308, 279, 283, 314, 313, 270, 2709, 354, 309, 327, 318, 277, 315, 325, 302, 818, 340, 474, 336, 318, 569, 306, 304, 335, 350, 309, 312, 314, 339, 277, 2577, 280, 227, 239, 276, 283, 249, 270, 335, 2669, 323, 320, 321, 318, 651, 731, 264, 243, 320, 315, 246, 259, 310, 321, 280, 257, 312, 311, 272, 277, 279, 300, 326, 2602, 2651, 353, 254, 327, 2607, 2559, 2438, 2424, 307, 282, 284, 324, 325, 294, 268, 313, 305, 263, 270, 319, 303, 262, 2628, 346, 346, 282, 285, 278, 328, 260, 281, 304, 327, 265, 314, 315, 270, 257, 304, 298, 258, 258, 300, 298, 321, 537, 550, 539, 2878, 290, 286, 284, 283, 296, 305, 298, 294, 293, 299, 268, 285, 319, 348, 288, 308, 289, 248, 259, 325, 328, 315, 309, 337, 356, 321, 279, 313, 2751, 339, 321, 340, 304, 302, 345, 350, 309, 277, 362, 339, 321, 316, 365, 363, 323, 283, 322, 309, 198, 161, 204, 198, 147, 157, 183, 218, 178, 197, 214, 174, 172]
 inverter_pwr_x = [x for x in range(1, len(inverter_pwr_y)+1)]
@@ -68,6 +72,10 @@ electricity_fig = px.line(x_line, x="x", y="y", title="Power Usage")
 electricity_fig.add_scatter(x=inverter_pwr["x"], y=inverter_pwr["y"], name="Inverter")
 electricity_fig.add_scatter(x=feedin_pwr["x"], y=feedin_pwr["y"], name="Feedin Power")
 electricity_fig.add_scatter(x=load_pwr_x, y=load_pwr_y, name="Load Power")
+# change electricity_fig backgroud color to transparent
+electricity_fig.update_layout(
+    paper_bgcolor="rgba(0,0,0,0)",
+)
 
 
 class VideoCamera(object):
@@ -222,30 +230,32 @@ app.layout = html.Div([
             # consists of 3 parts: left, center, right
                 html.Div([
                     html.Div([
-                        html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                        html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                        html.H6("Internet Usage", className="text-sm", style={"color": "#778997"}),
+                        html.H5("104 GB", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#40e122", "text-align": "center", "font-size": "50px"}),
+                        html.H6("expires in ", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
+                        html.H5("5 Days", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#278de1", "padding-left": "40px", "font-size": "25px"}),
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm rounded-lg border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700", style={"width": "22em"})
                 ], className="BAN1 grid grid-cols-1 gap-4 grid-BANs"),
                 html.Div([
                     html.Div([
                         html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
                         html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm  rounded-lg  border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
                 ], className="BAN2 grid grid-cols-1 gap-4 grid-BANs"),
                 html.Div([
                     html.Div([
                         html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
                         html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm  rounded-lg  border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
                 ], className="BAN3 grid grid-cols-1 gap-4 grid-BANs"),
                 
-            ], className="ban-container BAN-Area", style={"display":"flex", "justify-content": "center"}),
+            ], className="ban-container BAN-Area", ),
             html.Div([
                 dcc.Graph(id="internet_graph", figure=fig),
-            ], className="dashbaord-container Graph1"),
+            ], className="dashbaord-container Graph1 glassmorphism "),
             html.Div([
                 dcc.Graph(id="electricity_graph", figure=electricity_fig),
-            ], className="electricity-container Graph2"),
+            ], className="electricity-container Graph2 glassmorphism "),
         ], className="test-container"),
     ], id = "dashboard" , style=none_display)
 
