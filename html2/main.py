@@ -1,3 +1,4 @@
+from re import template
 from turtle import onclick
 from socket import timeout
 import threading as th
@@ -56,9 +57,16 @@ none_display = {'display':'none'}
 face_count = 0
 frame_count = 0
 
+pd.options.plotting.backend = "plotly"
+cols = ["Temperature", "Humidity", "LUME"]
 TempVar = 0
 HumdVar = 0
 LumeVar = 0
+X = np.random.randn(1,len(cols))  
+thl_df=pd.DataFrame(X, columns=cols)
+thl_df.iloc[0]=0;
+
+thl_fig = thl_df.plot(template = 'plotly')
 
 import asyncio
 import base64
@@ -311,6 +319,10 @@ app.layout = html.Div([
             html.Div([
                 dcc.Graph(id="electricity_graph", figure=electricity_fig),
             ], className="electricity-container Graph2 glassmorphism "),
+            html.Div([
+                dcc.Interval(id="interval-component", interval=1*1000, n_intervals=0),
+                dcc.Graph(id="thl_graph")
+            ], className="dashbaord-container Graph3 glassmorphism "),
         ], className="test-container"),
     ], id = "dashboard" , style=none_display)
 
@@ -393,6 +405,30 @@ def update_placeholder3(n_submit):
         motVar = 1
     print("motion is {}".format(motVar))
     return "Welcome back, Erina"
+
+@app.callback(
+    Output("thl_graph", "figure"),
+    [Input("interval-component", "n_intervals")]
+)
+def update_graph_live(n):
+    global TempVar
+    global HumdVar
+    global LumeVar
+    global thl_df
+    
+    TempVar = np.random.randn()
+    HumdVar = np.random.randn()
+    LumeVar = np.random.randn()
+
+    Y = np.array([[TempVar, HumdVar, LumeVar]])  
+    df2 = pd.DataFrame(Y, columns = cols)
+    thl_df = thl_df.append(df2, ignore_index=True)
+
+    fig = thl_df.plot(template = 'plotly')
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+    )
+    return(fig)
 
 # another way to write it but not finished yet
 # app.clientside_callback("""function(m){return m? `${face_count}`: 0;}""",Output("placeholder", "children"), Input("ws0", "message"))

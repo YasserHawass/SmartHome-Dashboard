@@ -29,11 +29,11 @@ fig = df.plot(template = 'plotly_dark')
 app = JupyterDash(__name__)
 app.layout = html.Div([
     html.H1("Streaming of random data"),
-            dcc.Interval(
-            id='interval-component',
-            interval=1*1000, # in milliseconds
-            n_intervals=0
-        ),
+    dcc.Interval(
+        id='interval-component',
+        interval=1*1000, # in milliseconds
+        n_intervals=0
+    ),
     dcc.Graph(id='graph'),
 ])
 
