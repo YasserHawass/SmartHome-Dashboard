@@ -200,3 +200,12 @@ button#m_button {
   color: mediumseagreen;
   margin-top: 2em;
 }
+
+/* I'm really sorry for such CSS butchering */
+div#face-counter-container{
+  font-family: fantasy;
+  font-size: xx-large;
+  color: coral;
+  padding-left: 25%;
+  height: 100px;
+}

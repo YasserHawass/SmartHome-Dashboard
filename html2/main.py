@@ -29,6 +29,7 @@ import datetime
 flex_display = {'display':'flex'}
 none_display = {'display':'none'}
 
+face_count = 0
 frame_count = 0
 import asyncio
 import base64
@@ -66,7 +67,7 @@ feedin_pwr_x = [x for x in range(1, len(feedin_pwr_y)+1)]
 load_pwr_y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 310, 367, 237, 13, 88, 294, 304, 230, 300, 307, 214, 239, 314, 328, 242, 279, 225, 274, 279, 310, 250, 269, 304, 323, 373, 243, 254, 239, 324, 384, 249, 386, 273, 2622, 316, 280, 321, 600, 471, 366, 361, 298, 306, 984, 1942, 1239, 1785, 3269, 1221, 904, 754, 359, 243, 254, 375, 443, 914, 2607, 621, 827, 461, 273, 256, 294, 791, 924, 2176, 427, 653, 1290, 1354, 1036, 1259, 553, 882, 1126, 973, 938, 937, 878, 1013, 457, 508, 664, 955, 778, 506, 474, 434, 410, 1701, 1835, 325, 282, 352, 2008, 1768, 1783, 1785, 351, 373, 213, 266, 310, 272, 291, 301, 333, 298, 281, 394, 334, 305, 1132, 314, 279, 346, 267, 261, 286, 263, 260, 260, 283, 262, 274, 263, 263, 260, 261, 262, 262, 260, 262, 263, 264, 524, 527, 525, 941, 366, 293, 293, 291, 292, 291, 296, 292, 295, 295, 295, 293, 291, 297, 293, 293, 292, 293, 295, 291, 294, 367, 368, 367, 366, 362, 282, 281, 859, 358, 365, 356, 361, 362, 361, 362, 357, 356, 364, 356, 358, 357, 362, 360, 362, 285, 283, 286, 202, 199, 202, 200, 201, 199, 200, 200, 203, 199, 201, 200, 200]
 load_pwr_x = [x for x in range(1, len(load_pwr_y)+1)]
 inverter_pwr = pd.DataFrame({"x": inverter_pwr_x, "y": inverter_pwr_y})
-x_line = pd.DataFrame({"x": inverter_pwr_x, "y": inverter_pwr_x})
+x_line = pd.DataFrame({"x": inverter_pwr_x, "y": 0})
 feedin_pwr = pd.DataFrame({"x": feedin_pwr_x, "y": feedin_pwr_y})
 electricity_fig = px.line(x_line, x="x", y="y", title="Power Usage")
 electricity_fig.add_scatter(x=inverter_pwr["x"], y=inverter_pwr["y"], name="Inverter")
@@ -97,17 +98,18 @@ class VideoCamera(object):
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
         _, jpeg = cv2.imencode('.jpg', frame)
-        return jpeg.tobytes()
+        return jpeg.tobytes(), len(face_locations)
 
 # Setup small Quart server for streaming via websocket, one for each stream.
 server = Quart(__name__)
 
 async def stream(camera, delay=None):
+    global face_count
     while True:
         if delay is not None:
             await asyncio.sleep(delay)  # add delay if CPU usage is too high
-        frame = camera.get_frame()
-        await websocket.send(f"data:image/jpeg;base64, {base64.b64encode(frame).decode()}")
+        frame, face_count = camera.get_frame()
+        await websocket.send(f"data:image/jpeg;base64, {base64.b64encode(frame).decode()}"), face_count
 
 
 @server.websocket("/stream0")
@@ -209,7 +211,7 @@ app.layout = html.Div([
                                 ],htmlFor="motion-sensor-toggle-button", className="flex items-center bg-gray-400 h-6 w-12 rounded-full")
                             ], className="glassmorphism relative grid place-items-center py-1 px-1 box-border w-full h-full cursor-pointer"),
 
-                        ],className="controls flex gap-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-2 grid-rows-2 md:grid-rows-1 lg:grid-rows-2 max-w-full w-full"),
+                        ],className="controls flex gap-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-2 grid-rows-2 md:grid-rows-1 lg:grid-rows-2 max-w-full w-full", id="face-counter-container"),
                     ], className="controls flex place-items-center w-full mt-8 lg:mt-0", style={"width": "81%"})
                 ],className="flex flex-col lg:gap-5 justify-center items-center w-full mt-8 lg:mt-16 mb-0 lg:my-16")
             ],className="glassmorphism flex flex-col box-border max-w-screen-lg w-full lg:w-8/12", style={"width":"81%"}),
@@ -273,6 +275,16 @@ def update_m_button(n_clicks):
         return flex_display, none_display
     else:
         return none_display, flex_display
+
+# multiple output is not available in dash yet, and spliiting the json from websocket introuduced more headache and this is the workaround
+@app.callback(
+    Output("face-counter-container", "children"),
+    Input("ws0", "message")
+)
+def update_placeholder(message):
+    return f"People Counter: {face_count} "
+# another way to write it but not finished yet
+# app.clientside_callback("""function(m){return m? `${face_count}`: 0;}""",Output("placeholder", "children"), Input("ws0", "message"))
 
 app.clientside_callback("function(m){return m? m.data : '';}", Output(f"v0", "src"), Input(f"ws0", "message"))
 
