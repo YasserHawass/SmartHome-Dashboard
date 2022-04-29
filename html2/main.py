@@ -1,4 +1,9 @@
 from turtle import onclick
+from socket import timeout
+import threading as th
+from matplotlib.colors import LightSource
+import time
+from sympy import line_integrate
 import plotly.express as px
 import pandas as pd
 import numpy as np
@@ -14,6 +19,25 @@ import plotly.io as pio
 from dash import Dash, html, dcc
 from dash.dependencies import Input, Output, State
 from dash_extensions import DeferScript
+
+line = None
+lightVar = 0
+vaccVar = 0
+motVar = 0
+def hw_worker():
+    import serial
+    global line
+    global lightVar
+    global vaccVar
+    global motVar
+    # Serial port
+    ino = serial.Serial('COM3', 9600)
+    while True:
+        #read line from serial port
+        # line = ino.readline()
+        ino.flush()
+        time.sleep(1)
+        ino.write('{!r}.{!r}.{!r}'.format(lightVar, vaccVar, motVar).encode('utf-8'))
 
 # %pylab inline 
 import face_recognition
@@ -132,6 +156,9 @@ app.layout = html.Div([
     html.Div([
         html.H1("Hello Back, Irena", id="placeholder"),
         html.Button("Home/Dashboard", id="m_button", n_clicks=0),
+        html.H1(id="placeholder1", style={"display": "none"}),
+        html.H1(id="placeholder2", style={"display": "none"}),
+        html.H1(id="placeholder3", style={"display": "none"}),
         # <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/09vDAnj6ezlRoHDu6fH1BW?utm_source=generator" width="50%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
         html.Iframe(id='spotify', src="https://open.spotify.com/embed/playlist/37i9dQZEVXcKQGtztD3HbB?utm_source=generator", allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"),
     ],id='menu', className="place-items-center bg-plant bg-center bg-cover box-border min-h-screen w-full p-8 lg:p-0"),
@@ -309,6 +336,64 @@ def update_m_button(n_clicks):
 )
 def update_placeholder(message):
     return f"People Counter: {face_count} "
+
+@app.callback(
+    Output("placeholder1", "children"),
+    Input("lights-toggle-button", "n_submit")
+)
+def update_placeholder(n_submit):
+    global lightVar
+    if n_submit == None:
+        n_submit = 0
+    else:
+        n_submit += 1
+    if n_submit % 2 == 0:
+        lightVar = 0
+        print(type(lightVar))
+    else:
+        lightVar = 1
+        print(type(lightVar))
+    print("light is {}".format(lightVar))
+    return "Welcome back, Erina"
+
+
+@app.callback(
+    Output("placeholder2", "children"),
+    Input("cleaning-toggle-button", "n_submit")
+)
+def update_placeholder2(n_submit):
+    global vaccVar
+    if n_submit == None:
+        n_submit = 0
+    else:
+        n_submit += 1
+    if n_submit % 2 == 0:
+        print(type(vaccVar))
+        vaccVar = 0
+    else:
+        print(type(vaccVar))
+        vaccVar = 1
+    print("vacc is {}".format(vaccVar))
+    return "Welcome back, Erina"
+@app.callback(
+    Output("placeholder3", "children"),
+    Input("motion-sensor-toggle-button", "n_submit")
+)
+def update_placeholder3(n_submit):
+    global motVar
+    if n_submit == None:
+        n_submit = 0
+    else:
+        n_submit += 1
+    if n_submit % 2 == 0:
+        print(type(motVar))
+        motVar = 0
+    else:
+        print(type(motVar))
+        motVar = 1
+    print("motion is {}".format(motVar))
+    return "Welcome back, Erina"
+
 # another way to write it but not finished yet
 # app.clientside_callback("""function(m){return m? `${face_count}`: 0;}""",Output("placeholder", "children"), Input("ws0", "message"))
 
@@ -316,6 +401,7 @@ app.clientside_callback("function(m){return m? m.data : '';}", Output(f"v0", "sr
 
 if __name__ == '__main__':
     print("Running app", file=sys.stderr)
+    threading.Thread(target=hw_worker).start()
     threading.Thread(target=app.run_server).start()
     print("Server started", file=sys.stderr)
     server.run()
