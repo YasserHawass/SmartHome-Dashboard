@@ -25,20 +25,39 @@ line = None
 lightVar = 0
 vaccVar = 0
 motVar = 0
+TempVar = 0
+HumdVar = 0
+LumeVar = 0
+
 def hw_worker():
     import serial
     global line
     global lightVar
     global vaccVar
     global motVar
+    global TempVar
+    global LumeVar
+    global HumdVar
     # Serial port
     ino = serial.Serial('COM3', 9600)
     while True:
         #read line from serial port
-        # line = ino.readline()
-        ino.flush()
+        line = ino.readline().decode()
+        #print line
+        line = line.split(',')
+        # convert digital values to physical values
+        TempVar = ((int(line[1]) / 1024.0) * 5000) / 10
+        LumeVar = 10000.0 * (5-(int(line[0])*0.0048828125))/(int(line[0])*0.0048828125)
+        E0 = 611
+        E = E0 * np.exp(5423 * ((1/273)-(1/293.15)))
+        Es = E0 * np.exp(5423 * ((1/273)-(1/TempVar)))
+        HumdVar = (E/Es)*100
+        print(TempVar, HumdVar, LumeVar)
         time.sleep(1)
+        # send values to leds
+        ino.flush()
         ino.write('{!r}.{!r}.{!r}'.format(lightVar, vaccVar, motVar).encode('utf-8'))
+        ino.flush()
 
 # %pylab inline 
 import face_recognition
@@ -59,9 +78,6 @@ frame_count = 0
 
 pd.options.plotting.backend = "plotly"
 cols = ["Temperature", "Humidity", "LUME"]
-TempVar = 0
-HumdVar = 0
-LumeVar = 0
 X = np.random.randn(1,len(cols))  
 thl_df=pd.DataFrame(X, columns=cols)
 thl_df.iloc[0]=0;
@@ -416,9 +432,6 @@ def update_graph_live(n):
     global LumeVar
     global thl_df
     
-    TempVar = np.random.randn()
-    HumdVar = np.random.randn()
-    LumeVar = np.random.randn()
 
     Y = np.array([[TempVar, HumdVar, LumeVar]])  
     df2 = pd.DataFrame(Y, columns = cols)
