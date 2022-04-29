@@ -56,43 +56,33 @@ electricity_fig.add_scatter(x=inverter_pwr["x"], y=inverter_pwr["y"], name="Inve
 electricity_fig.add_scatter(x=feedin_pwr["x"], y=feedin_pwr["y"], name="Feedin Power")
 electricity_fig.add_scatter(x=load_pwr_x, y=load_pwr_y, name="Load Power")
 
+
 app = Dash(__name__ )
 app.layout = html.Div([
     html.Div([
-        html.H1(datetime.datetime.now().strftime("%A, "), style={"color": "#52697C"}),
-        html.H2(datetime.datetime.now().strftime(" %d %B %Y"), style={"padding-left": "10px", "color": "#778997"}),
-    ], id='date-container', style={'display': 'flex', 'position': 'absolute', 'right': '10px', 'top': '8px'}),
-    # BAN banner
+                                html.P("Lights", className="m-0 text-sm"),
+                                html.Img(className="w-8 m-2", src="https://img.icons8.com/pastel-glyph/64/000000/light--v1.png"),
+                                dcc.Input(id="lights-toggle-button", type="checkbox", value="", className="absolute w-full h-full opacity-0",),
+                                html.Label([
+                                    html.Div(className="toggle-dot bg-white m-1 h-5 w-5 rounded-full")
+                                ],htmlFor="lights-toggle-button", className="flex items-center bg-gray-400 h-6 w-12 rounded-full")
+                            ], className="glassmorphism relative grid place-items-center py-1 px-1 box-border w-full h-full cursor-pointer"),
     html.Div([
-    # consists of 3 parts: left, center, right
-        html.Div([
-            html.Div([
-                html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-            ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-        ], className="BAN1 grid grid-cols-1 gap-4 grid-BANs"),
-        html.Div([
-            html.Div([
-                html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-            ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-        ], className="BAN2 grid grid-cols-1 gap-4 grid-BANs"),
-        html.Div([
-            html.Div([
-                html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-            ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
-        ], className="BAN3 grid grid-cols-1 gap-4 grid-BANs"),
-        
-    ], className="ban-container BAN-Area", style={"display":"flex", "justify-content": "center"}),
-    html.Div([
-        dcc.Graph(id="internet_graph", figure=fig),
-    ], className="dashbaord-container Graph1"),
-    html.Div([
-        dcc.Graph(id="electricity_graph", figure=electricity_fig),
-    ], className="electricity-container Graph2"),
+        html.H1("Hello", id="test-h1")
+    ], id="test-div")
 ], className="test-container" )
 
+@app.callback(
+    Output("test-h1", "children"),
+    Input("lights-toggle-button", "n_submit")
+)
+def update_output(n):
+    if n == None:
+        n = 0
+    else:
+        n = n+1
+    print(n)
+    return "Hello " + str(n) 
 
 
 if __name__ == '__main__':
