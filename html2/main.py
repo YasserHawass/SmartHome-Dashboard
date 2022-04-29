@@ -25,9 +25,9 @@ line = None
 lightVar = 0
 vaccVar = 0
 motVar = 0
-TempVar = 0
-HumdVar = 0
-LumeVar = 0
+TempVar = 32
+HumdVar = 50
+LumeVar = 427/8
 
 def hw_worker():
     import serial
@@ -39,7 +39,7 @@ def hw_worker():
     global LumeVar
     global HumdVar
     # Serial port
-    ino = serial.Serial('COM3', 9600)
+    ino = serial.Serial('COM5', 9600)
     while True:
         #read line from serial port
         line = ino.readline().decode()
@@ -47,11 +47,13 @@ def hw_worker():
         line = line.split(',')
         # convert digital values to physical values
         TempVar = ((int(line[1]) / 1024.0) * 5000) / 10
-        LumeVar = 10000.0 * (5-(int(line[0])*0.0048828125))/(int(line[0])*0.0048828125)
+        LumeVar = 10000.0 * (5-(int(line[0])*0.0048828125))/(int(line[0])*0.0048828125)/8
+        if LumeVar > 100:
+            LumeVar = 50
         E0 = 611
         E = E0 * np.exp(5423 * ((1/273)-(1/293.15)))
         Es = E0 * np.exp(5423 * ((1/273)-(1/TempVar)))
-        HumdVar = (E/Es)*100
+        # HumdVar = (E/Es)*100
         print(TempVar, HumdVar, LumeVar)
         time.sleep(1)
         # send values to leds
@@ -171,7 +173,7 @@ async def stream(camera, delay=None):
 async def stream0():
     # camera = VideoCamera("http://192.168.249.238/mjpeg/1")
     print("stream0", file=sys.stderr)
-    camera = VideoCamera(0)
+    camera = VideoCamera(1)
     await stream(camera)
 
 
@@ -321,7 +323,7 @@ app.layout = html.Div([
                         ], className="flex", style={"margin-left": "1em"}),
 
                         html.Div([
-                            html.H6(f"{LumeVar} ", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#ffd108"}),
+                            html.H6(f"{LumeVar*8} ", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#ffd108"}),
                             html.H6(f" LUME", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#ffd108"}),
                         ], className="flex", style={"margin-left": "1em"}),
                         
