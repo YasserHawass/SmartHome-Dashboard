@@ -31,6 +31,11 @@ none_display = {'display':'none'}
 
 face_count = 0
 frame_count = 0
+
+TempVar = 0
+HumdVar = 0
+LumeVar = 0
+
 import asyncio
 import base64
 import threading
@@ -64,6 +69,8 @@ inverter_pwr_y = [221, 180, 181, 212, 211, 168, 185, 214, 172, 171, 202, 213, 20
 inverter_pwr_x = [x for x in range(1, len(inverter_pwr_y)+1)]
 feedin_pwr_y = [-221, -180, -181, -212, -211, -168, -185, -214, -172, -171, -202, -213, -205, -206, -241, -246, -163, -162, -206, -201, -159, -160, -202, -204, -161, -384, -386, -378, -375, -215, -201, -211, -212, -209, -210, -211, -210, -210, -167, -182, -210, -204, -130, -146, -187, -189, -148, -148, -222, -223, -179, -183, -221, -221, -180, -187, -221, -180, -179, -209, -224, -181, -205, -237, -258, -262, -223, -225, -275, -258, -217, -250, -249, -195, -176, -209, -232, -184, -209, -248, -258, -209, -212, -227, -258, -211, -180, 92, 72, -64, -265, -172, -5, -35, -45, -7, -2, -49, -30, 3, 21, -27, 3, -83, 17, -2, 5, -61, -3, 28, 4, 60, -25, -42, -69, 45, 101, -65, 73, 3, -87, -38, -29, -6, 282, 194, 51, 36, -4, -512, 644, 1468, 903, 1467, 2700, 915, 600, 419, 9, -66, -58, 61, 104, 637, 30, 341, 600, 222, -3, -27, 45, 521, 589, -493, 104, 333, 969, 1036, 385, 528, 289, 639, 806, 658, 692, 678, 568, 692, 177, 251, 352, 644, 506, 229, 195, 134, 84, -901, -816, -28, 28, 25, -599, -791, -655, -639, 44, 91, -71, -58, -15, -22, 23, -12, 28, 35, 11, 75, 31, 43, -1496, -32, -67, 64, -18, -17, -42, 3, -21, -44, -44, -3, -40, -52, -7, 3, -43, -36, 4, 2, -38, -35, -57, -13, -23, -14, -1937, 76, 7, 9, 8, -4, -14, -2, -2, 2, -4, 27, 8, -28, -51, 5, -15, 3, 45, 36, -34, -34, 52, 59, 30, 10, 41, 3, -32, -1892, 19, 44, 16, 57, 60, 16, 12, 48, 79, 2, 17, 37, 41, -3, -3, 39, 2, -39, -23, 4, 38, -2, 2, 54, 42, 17, -18, 25, 2, -13, 26, 28,]
 feedin_pwr_x = [x for x in range(1, len(feedin_pwr_y)+1)]
+accumulated_feedin_pwr = sum(feedin_pwr_y)/1000
+print(accumulated_feedin_pwr)
 load_pwr_y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 310, 367, 237, 13, 88, 294, 304, 230, 300, 307, 214, 239, 314, 328, 242, 279, 225, 274, 279, 310, 250, 269, 304, 323, 373, 243, 254, 239, 324, 384, 249, 386, 273, 2622, 316, 280, 321, 600, 471, 366, 361, 298, 306, 984, 1942, 1239, 1785, 3269, 1221, 904, 754, 359, 243, 254, 375, 443, 914, 2607, 621, 827, 461, 273, 256, 294, 791, 924, 2176, 427, 653, 1290, 1354, 1036, 1259, 553, 882, 1126, 973, 938, 937, 878, 1013, 457, 508, 664, 955, 778, 506, 474, 434, 410, 1701, 1835, 325, 282, 352, 2008, 1768, 1783, 1785, 351, 373, 213, 266, 310, 272, 291, 301, 333, 298, 281, 394, 334, 305, 1132, 314, 279, 346, 267, 261, 286, 263, 260, 260, 283, 262, 274, 263, 263, 260, 261, 262, 262, 260, 262, 263, 264, 524, 527, 525, 941, 366, 293, 293, 291, 292, 291, 296, 292, 295, 295, 295, 293, 291, 297, 293, 293, 292, 293, 295, 291, 294, 367, 368, 367, 366, 362, 282, 281, 859, 358, 365, 356, 361, 362, 361, 362, 357, 356, 364, 356, 358, 357, 362, 360, 362, 285, 283, 286, 202, 199, 202, 200, 201, 199, 200, 200, 203, 199, 201, 200, 200]
 load_pwr_x = [x for x in range(1, len(load_pwr_y)+1)]
 inverter_pwr = pd.DataFrame({"x": inverter_pwr_x, "y": inverter_pwr_y})
@@ -240,15 +247,34 @@ app.layout = html.Div([
                 ], className="BAN1 grid grid-cols-1 gap-4 grid-BANs"),
                 html.Div([
                     html.Div([
-                        html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                        html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm  rounded-lg  border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                        html.H6("Acc. Power-feeed", className="text-sm", style={"color": "#778997"}),
+                        # accumultaed power usage in kWh
+                        html.H5(f"{str(accumulated_feedin_pwr)} kWh", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "rgb(255 0 0)", "text-align": "center", "font-size": "50px"}),
+                        html.H6("equal. to", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
+                        html.H5(f"{str(accumulated_feedin_pwr*0.045)} $", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#e12741", "padding-left": "40px", "font-size": "25px"}),
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm  rounded-lg  border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700", style={"width": "22em"})
                 ], className="BAN2 grid grid-cols-1 gap-4 grid-BANs"),
                 html.Div([
                     html.Div([
-                        html.H5("BAN", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
-                        html.H6("BAN", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
-                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm  rounded-lg  border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700")
+                        html.Div([
+                            html.H5("Cairo, EG", className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white", style={"color": "#52697C"}),
+                            html.Img(src="http://www.gstatic.com/images/icons/material/apps/weather/2x/mostly_sunny_light_color_96dp.png", className="w-8 m-2"),
+                        ], className="flex"),
+                        html.Div([
+                            html.H6(f"{TempVar} ", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#647a89", "font-size": "xx-large"}),
+                            html.H6("°C", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#778997"}),
+                        ], className="flex"),
+                        html.Div([
+                            html.H6(f"{HumdVar} ", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#3586c5"}),
+                            html.H6(f"% Water Vapor", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#3586c5"}),
+                        ], className="flex", style={"margin-left": "1em"}),
+
+                        html.Div([
+                            html.H6(f"{LumeVar} ", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#ffd108"}),
+                            html.H6(f" LUME", className="font-normal text-gray-700 dark:text-gray-400", style={"color": "#ffd108"}),
+                        ], className="flex", style={"margin-left": "1em"}),
+                        
+                    ], className="p-6 bg-gray-100 rounded-lg block p-6 max-w-sm  rounded-lg  border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700", style={"width": "22em"})
                 ], className="BAN3 grid grid-cols-1 gap-4 grid-BANs"),
                 
             ], className="ban-container BAN-Area", ),
